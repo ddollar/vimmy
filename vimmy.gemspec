@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.authors     = "David Dollar"
   s.email       = "ddollar@gmail.com"
   s.homepage    = "http://github.com/ddollar/vimmy"
-  s.summary     = "Manage vim plugins"
+  s.summary     = "Manage vim plugins using pathogen"
   s.description = s.summary
 
   s.rubyforge_project = "vimmy"
