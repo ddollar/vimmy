@@ -28,6 +28,15 @@ class Vimmy::CLI < Thor
     url = choose(matching(term), "Choose a plugin to install")
   end
 
+  desc "update", "Update all vim plugins"
+
+  def update
+    Dir[File.expand_path("~/.vim/bundle/*")].each do |plugin|
+      puts "Updating: #{plugin}"
+      system "cd #{plugin} && git pull"
+    end
+  end
+
 private ######################################################################
 
   def backup(file)
@@ -47,7 +56,7 @@ private ######################################################################
     print "#{prompt}: "
 
     if (index = STDIN.gets.to_i) > 0
-      return unless plugin = sort(plugins)[index-1]      
+      return unless plugin = sort(plugins)[index-1]
       install_plugin plugin.first
     end
   end
@@ -64,6 +73,7 @@ private ######################################################################
   end
 
   def install_plugin(url)
+    puts "Installing: #{url}"
     system %{ cd ~/.vim/bundle && git clone #{url}.git }
   end
 
