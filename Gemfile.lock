@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vimmy (0.0.1)
+    vimmy (0.0.2)
       mechanize (~> 1.0.0)
       thor (~> 0.14.6)
 
