@@ -25,7 +25,7 @@ class Vimmy::CLI < Thor
   desc "install TERM", "Install a vim plugin"
 
   def install(term)
-    url = choose(matching(term), "Choose a plugin to install")
+    url = install_choice(matching(term), "Choose a plugin to install")
   end
 
   desc "update", "Update all vim plugins"
@@ -51,7 +51,7 @@ private ######################################################################
     end
   end
 
-  def choose(plugins, prompt)
+  def install_choice(plugins, prompt)
     display plugins
     print "#{prompt}: "
 
