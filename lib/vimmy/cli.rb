@@ -74,7 +74,13 @@ private ######################################################################
 
   def install_plugin(url)
     puts "Installing: #{url}"
-    system %{ cd ~/.vim/bundle && git clone #{url}.git }
+    if File.exist?(File.expand_path("~/.git"))
+      name = url.to_s.split("/").last
+      system %{ cd ~ && git submodule add -f #{url}.git .vim/bundle/#{name} &&
+                git commit -m "added #{name} vim plugin" }
+    else
+      system %{ cd ~/.vim/bundle && git clone #{url}.git }
+    end
   end
 
   def matching(term)
