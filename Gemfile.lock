@@ -2,21 +2,19 @@ PATH
   remote: .
   specs:
     vimmy (0.2.0)
-      mechanize (~> 1.0.0)
+      rest-client (~> 1.6.7)
       thor (~> 0.14.6)
 
 GEM
   remote: http://rubygems.org/
   specs:
-    mechanize (1.0.0)
-      nokogiri (>= 1.2.1)
-    nokogiri (1.4.4)
+    mime-types (1.17.2)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     thor (0.14.6)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  mechanize (~> 1.0.0)
-  thor (~> 0.14.6)
   vimmy!

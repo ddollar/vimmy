@@ -1,5 +1,6 @@
 require "fileutils"
-require "mechanize"
+require "json"
+require "rest_client"
 require "thor"
 require "vimmy"
 
@@ -57,13 +58,13 @@ private ######################################################################
 
     if (index = STDIN.gets.to_i) > 0
       return unless plugin = sort(plugins)[index-1]
-      install_plugin plugin.first
+      install_plugin plugin["url"]
     end
   end
 
   def display(plugins)
-    sort(plugins).each_with_index do |(url, plugin), index|
-      puts "%d) %-28s  %s" % [index+1, plugin[:name][0,28], plugin[:description][0,50]]
+    sort(plugins).each_with_index do |plugin, index|
+      puts "%d) %-28s  %s" % [index+1, plugin["name"][0,28], plugin["description"][0,50]]
     end
   end
 
@@ -84,8 +85,8 @@ private ######################################################################
   end
 
   def matching(term)
-    plugins.select do |url, plugin|
-      [plugin[:name], plugin[:description]].join(" ") =~ /#{term}/i
+    plugins.select do |plugin|
+      [plugin["name"], plugin["description"]].join(" ") =~ /#{term}/i
     end
   end
 
@@ -94,24 +95,27 @@ private ######################################################################
   end
 
   def plugins
-    page = Mechanize.new.get('http://vim-scripts.org/vim/scripts.html')
-    page.search('//tr').inject({}) do |hash, row|
-      link = row.search('td/a').first
-      hash.update(link.attributes['href'] => {
-        :name => link.text,
-        :description => row.search('td')[3].text
-      })
+    JSON.parse(vimscripts["scripts_recent.json"].get).map do |plugin|
+      { 
+        "name" => plugin["n"], 
+        "description" => plugin["s"],
+        "url" => "https://github.com/vim-scripts/#{plugin["n"]}"
+      }
     end
   end
 
   def sort(plugins)
-    plugins.sort_by { |p| p.last[:name] }
+    plugins.sort_by { |p| p["name"] }
   end
 
   def template(file)
     source = File.expand_path("../../../data/template/#{file}", __FILE__)
     target = File.expand_path("~/#{file}", __FILE__)
     FileUtils.cp(source, target)
+  end
+
+  def vimscripts
+    @vimscripts ||= RestClient::Resource.new("http://vim-scripts.org/api")
   end
 
 end
